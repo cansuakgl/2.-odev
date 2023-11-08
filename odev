@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <string.h>
+
+int hashFunction(char arrayOfStrings[10][20], int initialStringIndex);
+int calcNewIndex(int hashedString);
+
+int main() {
+		char initialArrayOfStrings[10][20] = {"ahmet","mehmet","fatma","ceren","tugçe","fikri","cansu","zeynep","mustafa","mert"};
+    char newArrayOfStrings[100][20];
+    int HashedStringsArray[10];
+    int newIndexArray[10];
+    
+    for(int i=0; i<100; i++) {
+        newArrayOfStrings[i][0] = '\0';
+    }
+    
+    for(int i=0; i<10; i++){
+        HashedStringsArray[i] = hashFunction(initialArrayOfStrings, i); 
+        newIndexArray[i] = calcNewIndex(HashedStringsArray[i]);
+        int indexSkip = 0;
+        while (newArrayOfStrings[newIndexArray[i] + indexSkip][0] != '\0'){
+            indexSkip++;
+        }
+        strcpy(newArrayOfStrings[newIndexArray[i] + indexSkip], initialArrayOfStrings[i]);
+        }
+
+        for(int i = 0; i<100; i++)
+            if (newArrayOfStrings[i][0] != '\0'){
+            printf("index :%d value :%s \n",i,newArrayOfStrings[i]);
+        }
+    return 0;
+}
+
+int hashFunction (char arrayOfStrings[10][20],int initialStringIndex){
+    int hashedString = 0;
+    int lengthOfString = strlen(arrayOfStrings[initialStringIndex]);
+    for(int i = 0; i < lengthOfString ; i++){
+        hashedString = hashedString  + ((arrayOfStrings[initialStringIndex][i] - 'a') * (pow(31,i)));
+    }
+    return hashedString;
+}
+
+int calcNewIndex (int hashedString){
+    int newIndexOfString;
+    int modulo = 31;
+    if (hashedString < 0){
+      while (hashedString < 0){
+      hashedString = hashedString + modulo;}
+      newIndexOfString = hashedString % modulo;
+    }
+    else {
+    newIndexOfString = hashedString % modulo;}
+    
+    return newIndexOfString;
+}
